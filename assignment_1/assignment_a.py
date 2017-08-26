@@ -7,7 +7,9 @@ from collections import deque
 import matplotlib.pyplot as plt
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
+
 output_dir = "output_1"
+DEQUE_LENGTH = 50
 
 
 def htheta_function(x, theta_0, theta_1):
@@ -37,6 +39,31 @@ def ymxc_line_points(m, c, min_x, max_x, step=1):
     return (x_values, y_values)
 
 
+def is_cost_decresing(last_cost_values):
+    """
+    Determines if the cost value is decreasing
+    """
+
+    cost_values_length = len(last_cost_values)
+
+    if cost_values_length < DEQUE_LENGTH:
+        return True
+
+    cost_differences = []
+
+    for i in range(0, cost_values_length - 1):
+        cost_difference = last_cost_values[i + 1] - last_cost_values[i]
+        cost_differences.append(cost_difference)
+
+    # Check if cost is decreasing
+    cost = statistics.mean(cost_differences)
+
+    if cost < 0:
+        return True
+    else:
+        return False
+
+
 def main():
     """
     Entry point for program
@@ -49,14 +76,11 @@ def main():
     theta_0 = random.random()
     theta_1 = random.random()
 
-    # Minimum threshold after which the gradient descent should stop
-    threshold = 0.01
-
     # Learning rate
     alpha = 0.01
 
     # Deque to hold value of cost function for the last 10 iterations
-    last_cost_values = deque(maxlen=10)
+    last_cost_values = deque(maxlen=DEQUE_LENGTH)
 
     # Number of iterations to plot for cost function
     number_of_iterations_to_plot = 500
@@ -123,11 +147,8 @@ def main():
 
         last_cost_values.append(mean_squared_error)
 
-        # Calculate the average cost value
-        last_cost_average = statistics.mean(last_cost_values)
-
-        logging.debug("Iteration:{} Cost:{}, Average:{}".format(
-            no_of_iterations, mean_squared_error, last_cost_average))
+        logging.debug("Iteration:{} Cost:{}".format(no_of_iterations,
+                                                    mean_squared_error))
 
         # Increment parameters
         theta_0 -= (alpha / no_of_training_sample) * theta_0_correction
@@ -135,8 +156,10 @@ def main():
 
         no_of_iterations += 1
 
-        if last_cost_average <= threshold:
-            logging.info("Reached minimum threshold")
+        if not (is_cost_decresing(last_cost_values)):
+            logging.info(
+                "Stopping as the cost value hasn't decreased for the last {} iterations".
+                format(DEQUE_LENGTH))
             break
 
         if no_of_iterations >= 10000:
