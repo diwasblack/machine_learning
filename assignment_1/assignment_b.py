@@ -1,14 +1,10 @@
 import os
 import random
 import logging
-import statistics
-from collections import deque
 
 import matplotlib.pyplot as plt
 
-logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
-output_dir = "output_2"
-DEQUE_LENGTH = 50
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
 
 def htheta_function(x1, x2, theta_0, theta_1, theta_2):
@@ -27,31 +23,6 @@ def obtain_range(list_object):
     max_value = max(list_object)
 
     return max_value - min_value
-
-
-def is_cost_decresing(last_cost_values):
-    """
-    Determines if the cost value is decreasing
-    """
-
-    cost_values_length = len(last_cost_values)
-
-    if cost_values_length < DEQUE_LENGTH:
-        return True
-
-    cost_differences = []
-
-    for i in range(0, cost_values_length - 1):
-        cost_difference = last_cost_values[i + 1] - last_cost_values[i]
-        cost_differences.append(cost_difference)
-
-    # Check if cost is decreasing
-    cost = statistics.mean(cost_differences)
-
-    if cost < 0:
-        return True
-    else:
-        return False
 
 
 def scale_training_data(training_data):
@@ -82,7 +53,7 @@ def main():
     training_inputs = [(2, 70), (3, 30), (4, 80), (4, 20), (3, 50), (7, 10),
                        (5, 50), (3, 90), (2, 20)]
 
-    # training_inputs = scale_training_data(training_inputs)
+    training_inputs = scale_training_data(training_inputs)
 
     training_outputs = [79.4, 41.5, 97.5, 36.1, 63.2, 39.5, 69.8, 103.5, 29.5]
 
@@ -94,14 +65,14 @@ def main():
     # Learning rate
     alpha = 0.01
 
-    # Deque to hold value of cost function for the last 10 iterations
-    last_cost_values = deque(maxlen=DEQUE_LENGTH)
-
     # Number of iterations to plot for cost function
     number_of_iterations_to_plot = 500
 
     # History of cost values
     cost_values = list()
+
+    output_dir = "output_2"
+    max_no_of_iterations = 10000
 
     if not (os.path.isdir(output_dir)):
         os.makedirs(output_dir)
@@ -155,8 +126,6 @@ def main():
         # Add cost value to history
         cost_values.append(mean_squared_error)
 
-        last_cost_values.append(mean_squared_error)
-
         logging.debug("Iteration:{} Cost:{}".format(no_of_iterations,
                                                     mean_squared_error))
 
@@ -165,13 +134,7 @@ def main():
         theta_1 -= (alpha / no_of_training_sample) * theta_1_correction
         theta_2 -= (alpha / no_of_training_sample) * theta_2_correction
 
-        if not (is_cost_decresing(last_cost_values)):
-            logging.info(
-                "Stopping as the cost value hasn't decreased for the last {} iterations".
-                format(DEQUE_LENGTH))
-            break
-
-        if no_of_iterations >= 10000:
+        if no_of_iterations >= max_no_of_iterations:
             logging.info("Reached maximum number of iterations")
             break
 

@@ -1,15 +1,10 @@
 import os
 import random
 import logging
-import statistics
-from collections import deque
 
 import matplotlib.pyplot as plt
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
-
-output_dir = "output_1"
-DEQUE_LENGTH = 50
 
 
 def htheta_function(x, theta_0, theta_1):
@@ -39,31 +34,6 @@ def ymxc_line_points(m, c, min_x, max_x, step=1):
     return (x_values, y_values)
 
 
-def is_cost_decresing(last_cost_values):
-    """
-    Determines if the cost value is decreasing
-    """
-
-    cost_values_length = len(last_cost_values)
-
-    if cost_values_length < DEQUE_LENGTH:
-        return True
-
-    cost_differences = []
-
-    for i in range(0, cost_values_length - 1):
-        cost_difference = last_cost_values[i + 1] - last_cost_values[i]
-        cost_differences.append(cost_difference)
-
-    # Check if cost is decreasing
-    cost = statistics.mean(cost_differences)
-
-    if cost < 0:
-        return True
-    else:
-        return False
-
-
 def main():
     """
     Entry point for program
@@ -77,16 +47,16 @@ def main():
     theta_1 = random.random()
 
     # Learning rate
-    alpha = 0.01
-
-    # Deque to hold value of cost function for the last 10 iterations
-    last_cost_values = deque(maxlen=DEQUE_LENGTH)
+    alpha = 1.0
 
     # Number of iterations to plot for cost function
-    number_of_iterations_to_plot = 500
+    number_of_iterations_to_plot = 200
 
     # History of cost values
     cost_values = list()
+
+    output_dir = "output_1"
+    max_no_of_iterations = 10000
 
     if not (os.path.isdir(output_dir)):
         os.makedirs(output_dir)
@@ -102,7 +72,6 @@ def main():
     plt.scatter(training_inputs, training_outputs)
     plt.xlabel("X")
     plt.ylabel("Y")
-    plt.title("Scatter plot of training data")
 
     plt.savefig(os.path.join(output_dir, "scatter_plot.png"))
 
@@ -145,8 +114,6 @@ def main():
         # Add cost value to history
         cost_values.append(mean_squared_error)
 
-        last_cost_values.append(mean_squared_error)
-
         logging.debug("Iteration:{} Cost:{}".format(no_of_iterations,
                                                     mean_squared_error))
 
@@ -156,13 +123,7 @@ def main():
 
         no_of_iterations += 1
 
-        if not (is_cost_decresing(last_cost_values)):
-            logging.info(
-                "Stopping as the cost value hasn't decreased for the last {} iterations".
-                format(DEQUE_LENGTH))
-            break
-
-        if no_of_iterations >= 10000:
+        if no_of_iterations >= max_no_of_iterations:
             logging.info("Reached maximum number of iterations")
             break
 
@@ -176,7 +137,6 @@ def main():
     # plt.clf()
 
     plt.plot(line_points[0], line_points[1])
-    plt.title("Regression line")
 
     plt.savefig(
         os.path.join(output_dir, "regression_line_{}.png".format(
@@ -185,16 +145,15 @@ def main():
     # Clear previous plot
     plt.clf()
 
-    minimun_points_to_plot = min(number_of_iterations_to_plot,
+    minimum_points_to_plot = min(number_of_iterations_to_plot,
                                  no_of_iterations)
 
     plt.plot(
-        range(1, minimun_points_to_plot + 1),
-        cost_values[:minimun_points_to_plot])
+        range(1, minimum_points_to_plot + 1),
+        cost_values[:minimum_points_to_plot])
 
     plt.xlabel("Iteration")
     plt.ylabel("J(θ)")
-    plt.title("Mean squared error per iteration")
 
     plt.savefig(
         os.path.join(output_dir, "cost_function_alpha_{}.png".format(
