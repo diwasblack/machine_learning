@@ -35,14 +35,17 @@ def scale_training_data(training_data):
 
     # Scale x1 by using range
     x1_range = obtain_range(training_x1)
+
+    logging.info("scaling factor for x1: {}".format(x1_range))
     scaled_x1 = [x1 / x1_range for x1 in training_x1]
 
     # Scale x2 by using range
     x2_range = obtain_range(training_x2)
+    logging.info("scaling factor for x2:{}".format(x2_range))
     scaled_x2 = [x2 / x2_range for x2 in training_x2]
 
     scaled_training_data = [tuple(x) for x in zip(scaled_x1, scaled_x2)]
-    return scaled_training_data
+    return scaled_training_data, x1_range, x2_range
 
 
 def main():
@@ -53,7 +56,7 @@ def main():
     training_inputs = [(2, 70), (3, 30), (4, 80), (4, 20), (3, 50), (7, 10),
                        (5, 50), (3, 90), (2, 20)]
 
-    training_inputs = scale_training_data(training_inputs)
+    training_inputs, x1_scale, x2_scale = scale_training_data(training_inputs)
 
     training_outputs = [79.4, 41.5, 97.5, 36.1, 63.2, 39.5, 69.8, 103.5, 29.5]
 
@@ -141,7 +144,7 @@ def main():
         no_of_iterations += 1
 
     logging.info("Final values\ntheta0: {}\ntheta1: {}\ntheta2: {}".format(
-        theta_0, theta_1, theta_2))
+        theta_0, theta_1 * x1_scale, theta_2 * x2_scale))
 
     minimum_points_to_plot = min(number_of_iterations_to_plot,
                                  no_of_iterations)
