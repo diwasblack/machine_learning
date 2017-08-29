@@ -77,8 +77,8 @@ def main():
     if not (os.path.isdir(output_dir)):
         os.makedirs(output_dir)
 
-    logging.info(
-        "Initial values\ntheta0: {}\ntheta1: {}".format(theta_0, theta_1))
+    logging.info("Initial values\ntheta0: {}\ntheta1: {}\ntheta2: {}".format(
+        theta_0, theta_1, theta_2))
 
     zipped_training_samples = [
         list(x) for x in zip(training_inputs, training_outputs)
@@ -140,19 +140,18 @@ def main():
 
         no_of_iterations += 1
 
-    logging.info(
-        "Final values\ntheta0: {}\ntheta1: {}".format(theta_0, theta_1))
+    logging.info("Final values\ntheta0: {}\ntheta1: {}\ntheta2: {}".format(
+        theta_0, theta_1, theta_2))
 
-    minimun_points_to_plot = min(number_of_iterations_to_plot,
+    minimum_points_to_plot = min(number_of_iterations_to_plot,
                                  no_of_iterations)
 
     plt.plot(
-        range(1, minimun_points_to_plot + 1),
-        cost_values[:minimun_points_to_plot])
+        range(1, minimum_points_to_plot + 1),
+        cost_values[:minimum_points_to_plot])
 
     plt.xlabel("Iteration")
     plt.ylabel("J(θ)")
-    plt.title("Mean squared error per iteration")
     plt.savefig(
         os.path.join(output_dir, "cost_function_alpha_{}.png".format(
             str(alpha).replace(".", "_"))))
