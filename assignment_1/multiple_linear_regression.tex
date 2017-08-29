@@ -1,0 +1,78 @@
+\section{Multiple linear regression}
+
+\subsection{Model}
+\begin{equation}
+\label{eq:multiple_linear_regression_model}
+Y = \theta_0 + \theta_1 * X_1 + \theta_2 * X_2
+\end{equation}
+
+% Regression without scaling the predictor variables
+\subsection{Regression without scaling predictor variables}
+\subsubsection{Initial values of parameters}
+\begin{equation}
+\theta_0 = 0.6520699150884046
+\end{equation}
+\begin{equation}
+\theta_1 = 0.9861396174652116
+\end{equation}
+\begin{equation}
+\theta_2 = 0.9915108605252747
+\end{equation}
+
+\subsubsection{Final values of parameters}
+\begin{equation}
+\theta_0 = 4.311257778431243e+152
+\end{equation}
+\begin{equation}
+\theta_1 = 1.4490623380861671e+153
+\end{equation}
+\begin{equation}
+\theta_2 = 2.685595874504226e+154
+\end{equation}
+
+\begin{figure}[!ht]
+    \includegraphics[width=\textwidth, height=.4\textheight]{output_2/cost_function_alpha_0_01_unscaled.png}
+    \caption{Mean squared error when predictor variables are not scaled}
+    \label{fig:mean_squared_without_scaling}
+\end{figure}
+
+% Regression after scaling the predictor variables
+\subsection{Regression after scaling predictor variables}
+\subsubsection{Initial values of parameters}
+\begin{equation}
+\theta_0 = 0.4409653770961314
+\end{equation}
+\begin{equation}
+\theta_1 = 0.16376353557709156
+\end{equation}
+\begin{equation}
+\theta_2 = 0.2407927690962538
+\end{equation}
+
+\subsubsection{Final values of parameters}
+\begin{equation}
+\theta_0 = 1.545463253882367
+\end{equation}
+\begin{equation}
+\theta_1 = 3.8202281258797064
+\end{equation}
+\begin{equation}
+\theta_2 = 1.0008683090251478
+\end{equation}
+
+\begin{figure}[!ht]
+    \includegraphics[width=\textwidth, height=.4\textheight]{output_2/cost_function_alpha_0_01_scaled.png}
+    \caption{Mean squared error when predictor variables are scaled}
+    \label{fig:mean_squared_with_scaling}
+\end{figure}
+
+\subsection{Observation}
+Equation \ref{eq:multiple_linear_regression_model} was used to model the prediction variable Y as a linear model of predicting variables $X_1$ and $X_2$. At first, multiple linear regression without parameter scaling was used to obtain the prediction line. The cost function value kept increasing and it failed to converge as shown in the figure \ref{fig:mean_squared_without_scaling}.
+
+When parameter scaling was used with multiple linear regression the gradient descent algorithm converged and was able to obtain the optimum values for the $\theta$s. The corresponding graph for cost function when predicting parameters were scaled is shown in figure \ref{fig:mean_squared_with_scaling}.
+\subsection{Conclusion}
+The data that was used with multiple linear regression shows that the predictor variable $X_2$ had higher magnitude than the values of predictor variable $X_1$. Due to the dissimilarity in magnitude of predictor variables the gradient descent algorithm when used without feature scaling diverges and fails to yield an optimum regression line.
+
+\subsection{Source Code}
+
+\lstinputlisting[language=python]{assignment_b.py}

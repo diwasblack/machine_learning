@@ -1,0 +1,117 @@
+\section{Simple linear regression}
+
+\subsection{Model}
+\begin{equation}
+\label{eq:simple_linear_model}
+Y = \theta_0 + \theta_1 * X
+\end{equation}
+
+\subsection{Data}
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{output_1/scatter_plot.png}
+  \caption{Scatter plot of data}
+  \label{fig:scatter_plot}
+\end{figure}
+
+% For alpha=0.01
+\subsection{For $\alpha$ = 0.01}
+\subsubsection{Initial values of parameters}
+\begin{equation}
+\theta_0 = 0.8962072600475405
+\end{equation}
+\begin{equation}
+\theta_1 = 0.2669940858224631
+\end{equation}
+
+\subsubsection{Final values of parameters}
+\begin{equation}
+\theta_0 = 1.0600275383405036
+\end{equation}
+\begin{equation}
+\theta_1 = 1.9933270664119627
+\end{equation}
+
+\begin{figure}[!ht]
+    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{output_1/regression_line_0_01.png}
+    \caption{Regression line for $\alpha$ = 0.01}
+    \label{fig:regression_line_alpha_0_01}
+\end{figure}
+
+\begin{figure}[!ht]
+    \includegraphics[width=\textwidth,height=0.4\textheight, keepaspectratio]{output_1/cost_function_alpha_0_01.png}
+    \caption{Mean squared error for $\alpha$ = 0.01}
+    \label{fig:mean_square_alpha_0_01}
+\end{figure}
+
+% For alpha=0.1
+\subsection{For $\alpha$ = 0.1}
+\subsubsection{Initial values of parameters}
+\begin{equation}
+\theta_0 = 0.6463591916414174
+\end{equation}
+\begin{equation}
+\theta_1 = 0.6158535662289891
+\end{equation}
+
+\subsubsection{Final values of parameters}
+\begin{equation}
+\theta_0 = 1.0599999999999916
+\end{equation}
+\begin{equation}
+\theta_1 = 1.9933333333333352
+\end{equation}
+
+\begin{figure}[!ht]
+    \includegraphics[width=\textwidth,height=0.4\textheight]{output_1/regression_line_0_1.png}
+    \caption{Regression line for $\alpha$ = 0.1}
+    \label{fig:regression_line_alpha_0_1}
+\end{figure}
+
+\begin{figure}[!ht]
+    \includegraphics[width=\textwidth,height=0.4\textheight]{output_1/cost_function_alpha_0_1.png}
+    \caption{Mean squared error for $\alpha$ = 0.1}
+    \label{fig:mean_square_alpha_0_1}
+\end{figure}
+
+% For alpha=1
+\subsection{For $\alpha$ = 1.0}
+\subsubsection{Initial values of parameters}
+\begin{equation}
+\theta_0 = 0.5560688289301584
+\end{equation}
+\begin{equation}
+\theta_1 = 0.9611765272334949
+\end{equation}
+
+\subsubsection{Final values of parameters}
+\begin{equation}
+\theta_0 = 1.0295053205606435e+155
+\end{equation}
+\begin{equation}
+\theta_1 = 4.523890821517764e+155
+\end{equation}
+
+\begin{figure}[!ht]
+    \includegraphics[width=\textwidth,height=.4\textheight]{output_1/regression_line_1_0.png}
+    \caption{Regression line for $\alpha$ = 1.0}
+    \label{fig:regression_line_alpha_1_0}
+\end{figure}
+
+\begin{figure}[!ht]
+    \includegraphics[width=\textwidth, height=.4\textheight]{output_1/cost_function_alpha_1_0.png}
+    \caption{Mean squared error for $\alpha$ = 1.0}
+    \label{fig:mean_squared_error_alpha_1_0}
+\end{figure}
+
+\subsection{Observation}
+The scatter plot of data in figure \ref{fig:scatter_plot} shows that there is a linear correlation between the predictor variable X and prediction variable Y. The equation \ref{eq:simple_linear_model} was used as a model for the linear regression. Using different values for $\alpha$ resulted in different cost value graph and regression line.
+
+For $\alpha$ = 0.01 and $\alpha$ = 0.1 the regression algorithm converged with decreasing cost function as shown in figure \ref{fig:mean_square_alpha_0_01} and figure \ref{fig:mean_square_alpha_0_1} respectively. The regression obtained for $\alpha$ = 0.01 shown in figure \ref{fig:regression_line_alpha_0_01} shows that the regression line properly fits the data. Also, for $\alpha$ = 0.1 a similar regression line is obtained as shown in figure \ref{fig:regression_line_alpha_0_1}.
+
+For $\alpha$ = 1, the gradient descent algorithm started to overshoot which resulted in increasing cost function as shown in figure \ref{fig:mean_squared_error_alpha_1_0}. The cost function continued to increase until a maximum limit was reached after which it was terminated. The resulting regression line was far from being an optimal one so was a poor fit for the data which is shown by figure \ref{fig:regression_line_alpha_1_0}.
+
+\subsection{Conclusion}
+Our observations obtained by varying the learning rate($\alpha$) shows that the learning rate has to carefully chosen for gradient descent step in linear regression algorithm. A higher learning rate may result in faster convergence but it may result in oscillation and overshooting which are not desired.
+\subsection{Source Code}
+
+\lstinputlisting[language=python]{assignment_a.py}
