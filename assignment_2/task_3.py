@@ -1,4 +1,3 @@
-import os
 import math
 import random
 import logging
@@ -61,11 +60,7 @@ def main():
     # Learning rate
     alpha = 0.01
 
-    output_dir = "output_3"
     max_no_of_iterations = 10000
-
-    if not (os.path.isdir(output_dir)):
-        os.makedirs(output_dir)
 
     logging.info(
         "Initial values\ntheta0: {}\ntheta1: {}".format(theta_0, theta_1))
@@ -79,7 +74,7 @@ def main():
     plt.xlabel("X")
     plt.ylabel("Y")
 
-    plt.savefig(os.path.join(output_dir, "scatter_plot.png"))
+    plt.savefig("scatter_plot.png")
 
     no_of_iterations = 0
     stop_training = False
@@ -120,8 +115,7 @@ def main():
     plt.plot(equation_points[0], equation_points[1])
 
     plt.savefig(
-        os.path.join(output_dir, "regression_curve_{}.png".format(
-            str(alpha).replace(".", "_"))))
+        "custom_cost_function_{}.png".format(str(alpha).replace(".", "_")))
 
 
 if __name__ == "__main__":
