@@ -11,11 +11,14 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 def htheta_function(x, theta_0=0, theta_1=0):
     """
     Hypothesis function to use
-
-    Using linear function as cost function must be linear
     """
 
-    return theta_0 + theta_1 * x
+    z = theta_0 + theta_1 * x
+
+    result = 1.0 / (1 + pow(math.e, -z))
+
+    # Return value of sigmoid function
+    return result
 
 
 def obtain_points(func, theta_0, theta_1, min_x, max_x, step=0.1):
@@ -90,11 +93,14 @@ def main():
             # Unpack training input output
             training_input, training_ouput = training_sample
 
-            # Calculate error
-            error = 1 - (2.0 * training_ouput)
+            htheta_value = htheta_function(training_input, theta_0, theta_1)
 
-            theta_0_correction += 100 * error * 1
-            theta_1_correction += 100 * error * training_input
+            # Calculate error
+            error = 100 * htheta_value * (1 - htheta_value) * (
+                1.0 - 2 * training_ouput)
+
+            theta_0_correction += error * 1
+            theta_1_correction += error * training_input
 
         # Increment parameters
         theta_0 -= (alpha / no_of_training_sample) * theta_0_correction
