@@ -143,8 +143,8 @@ def main():
 
     plt.plot(equation_points[0], equation_points[1])
 
-    plt.savefig(
-        "logistic_regress_curve_{}.png".format(str(alpha).replace(".", "_")))
+    plt.savefig("logistic_regression_curve_{}.png".format(
+        str(alpha).replace(".", "_")))
 
     classifier = make_classifier(theta_0, theta_1)
 
