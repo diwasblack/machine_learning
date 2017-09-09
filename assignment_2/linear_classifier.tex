@@ -1,0 +1,44 @@
+\section{Linear hypothesis using linear regression}
+
+\subsection{Data}
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{scatter_plot.png}
+  \caption{Scatter plot of data}
+  \label{fig:scatter_plot}
+\end{figure}
+
+\subsection{Implementation}
+A linear function given by equation \ref{eq:simple_linear_model} was selected as the hypothesis.
+Linear regression with learning learning rate($\alpha$) = 0.01 and gradient descent approach was used for optimizing the parameters.
+The training stopped after reaching the maximum allowed number of iterations which was 10000.
+For this specific dataset we can use a threshold of 0.5 to classify the data. The predicting data
+can be assigned a class 1 (fail) if $h_{\theta}$(x) $<$ 0.5 and class 2 (pass) otherwise.
+
+\begin{equation}
+\label{eq:simple_linear_model}
+Y = \theta_0 + \theta_1 * X
+\end{equation}
+
+\subsection{Observation}
+The final values of $\theta$s for a run are as follows:
+
+% Theta 0 final value
+\begin{equation}
+\theta_0 = -0.15184881886181856
+\end{equation}
+
+% Theta 1 final value
+\begin{equation}
+\theta_1 = 0.23405702659773173
+\end{equation}
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{regression_line_0_01.png}
+  \caption{Linear regression line}
+  \label{fig:regression_line}
+\end{figure}
+
+The regression line corresponding to the above $\theta$s is shown in figure \ref{fig:regression_line}
+
+\subsection{Source Code}
+\lstinputlisting[language=python]{task_1.py}

@@ -1,0 +1,60 @@
+\section{Using custom cost function}
+
+\subsection{Implementation}
+A cost function that satisfies the specified conditions is shown equation \ref{eq:custom_cost_function}
+
+\begin{equation}
+\label{eq:custom_cost_function}
+cost(h_{\theta}(x_i), y_i) = 100(1-y_i)h_{\theta}(x_i) + 100y_i(1-h_{\theta}(x_i))
+\end{equation}
+
+where,
+
+\begin{equation}
+\label{eq:logistic_regression}
+h_{\theta}(X) = \frac{1}{e^{-\theta_0 - \theta_1 * X}}
+\end{equation}
+
+The minimization function J($\theta$) is given by equation \ref{eq:custom_minimization_function}
+
+\begin{equation}
+\label{eq:custom_minimization_function}
+J(\theta) = \frac{100}{m} \sum_{i=1}^{m}(1-y_i)h_{\theta}(x_i) + y_i(1-h_{\theta}(x_i))
+\end{equation}
+
+The update rules for $\theta$s for the above minimization function are as follows.
+
+\begin{equation}
+\label{eq:theta_0_update}
+\theta_0 = \theta_0 + \frac{100\alpha}{m}\sum_{i=1}^{m}h_\theta(x_i)(1-h_\theta(x_i))(1-2y)
+\end{equation}
+
+\begin{equation}
+\label{eq:theta_1_update}
+\theta_1 = \theta_1 + \frac{100\alpha}{m}\sum_{i=1}^{m}h_\theta(x_i)(1-h_\theta(x_i))(1-2y)x_{i1}
+\end{equation}
+
+As seen from the equation \ref{eq:theta_0_update} and equation \ref{eq:theta_1_update} the learning rate($\alpha$)
+is multiplied by 100. To compensate for this $\alpha$ was set to 0.0001.
+
+\subsection{Observation}
+The final values of $\theta$s for a run are as follows
+
+% Theta 0 final value
+\begin{equation}
+\theta_0 = -3.22417040123273
+\end{equation}
+
+% Theta 1 final value
+\begin{equation}
+\theta_1 = 1.3578246237756078
+\end{equation}
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{custom_cost_function_0_0001.png}
+  \caption{Sigmoid graph for custom cost function}
+  \label{fig:custom_cost_function}
+\end{figure}
+
+\subsection{Source Code}
+\lstinputlisting[language=python]{task_4.py}

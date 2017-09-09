@@ -1,0 +1,34 @@
+\section{Logistic hypothesis using logistic regression}
+
+\subsection{Implementation}
+For logistic regression the hypothesis function is a sigmoid function given by equation \ref{eq:logistic_regression}.
+As before a learning rate($\alpha$) = 0.01 was used and gradient descent approach was used for parameter optimization.
+
+\begin{equation}
+\label{eq:logistic_regression}
+h_{\theta}(X) = \frac{1}{e^{-\theta_0 - \theta_1 * X}}
+\end{equation}
+
+\subsection{Observation}
+The final values of $\theta$s for a run are as follows:
+
+% Theta 0 final value
+\begin{equation}
+\theta_0 = -3.5327129208000407
+\end{equation}
+
+% Theta 1 final value
+\begin{equation}
+\theta_1 = 1.3214831636264568
+\end{equation}
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{logistic_regression_curve_0_01.png}
+  \caption{Logistic regression curve}
+  \label{fig:logistic_regression}
+\end{figure}
+
+The logistic curve corresponding to above $\theta$s is shown in figure \ref{fig:logistic_regression}
+
+\subsection{Source Code}
+\lstinputlisting[language=python]{task_2.py}
