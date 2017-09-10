@@ -39,21 +39,42 @@ The final values of $\theta$s for a run are as follows
 
 % Theta 0 final value
 \begin{equation}
-\theta_0 = -3.22417040123273
+\theta_0 = -13.915013230977546
 \end{equation}
 
 % Theta 1 final value
 \begin{equation}
-\theta_1 = 1.3578246237756078
+\theta_1 = 4.276707007556025
 \end{equation}
 
 The plot of decision curve for above $\theta$s is shown in figure \ref{fig:custom_cost_function}
 
 \begin{figure}[!ht]
-  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{custom_cost_function_0_0001.png}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{custom_cost_function_0_01.png}
   \caption{Sigmoid graph for custom cost function}
   \label{fig:custom_cost_function}
 \end{figure}
+
+If we overlap the curve obtained from logistic regression shown in figure \ref{fig:logistic_regression} and curve in figure \ref{fig:custom_cost_function}
+the resulting figure is shown in figure in \ref{fig:compare_log_vs_custom}.
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{compare_log_vs_custom.png}
+  \caption{Comparison of logistic regression and custom cost function}
+  \label{fig:compare_log_vs_custom}
+\end{figure}
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{custom_cost_function_0_0001.png}
+  \caption{Improved curve for custom cost function}
+  \label{fig:custom_cost_function_0_0001}
+\end{figure}
+
+\subsection{Conclusion}
+As shown by figure \ref{fig:compare_log_vs_custom}, after running for the same numbers of iterations the boundary line obtained
+from custom cost function does not clearly divides the data into two seperate regions as some of the data points lie in the boundary line.
+The equations \ref{eq:theta_0_update} and \ref{eq:theta_1_update} shows that the learning rate is multiplied by a scalar factor of 100. Due which the
+learning rate for $\theta$s becomes high. We can overcome this by further decreasing the learning rate to about 0.0001 as shown in figure \ref{fig:custom_cost_function_0_0001}
 
 \subsection{Source Code}
 \lstinputlisting[language=python]{task_4.py}
