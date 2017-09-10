@@ -34,9 +34,6 @@ The update rules for $\theta$s for the above minimization function are as follow
 \theta_1 = \theta_1 + \frac{100\alpha}{m}\sum_{i=1}^{m}h_\theta(x_i)(1-h_\theta(x_i))(1-2y)x_{i1}
 \end{equation}
 
-As seen from the equation \ref{eq:theta_0_update} and equation \ref{eq:theta_1_update} the learning rate($\alpha$)
-is multiplied by 100. To compensate for this $\alpha$ was set to 0.0001.
-
 \subsection{Observation}
 The final values of $\theta$s for a run are as follows
 
@@ -49,6 +46,8 @@ The final values of $\theta$s for a run are as follows
 \begin{equation}
 \theta_1 = 1.3578246237756078
 \end{equation}
+
+The plot of decision curve for above $\theta$s is shown in figure \ref{fig:custom_cost_function}
 
 \begin{figure}[!ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{custom_cost_function_0_0001.png}

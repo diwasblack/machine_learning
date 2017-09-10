@@ -58,7 +58,7 @@ def main():
     theta_1 = random.random()
 
     # Learning rate
-    alpha = 0.0001
+    alpha = 0.01
 
     max_no_of_iterations = 10000
 
