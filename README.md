@@ -40,6 +40,7 @@ You are given the following training data.
 2. Learn the parameters of the regression surface without scaling the predictor variables.
 3. Learn the parameters of the regression surface after scaling the predictor variables (divide by range).
 
+
 Assignment 2
 ===============
 
@@ -75,3 +76,26 @@ A group of 20 students studied 0 to 6 hours for the exam.  Some passed and other
     Y = 1 - Cost function goes from 100 to 0 linearly as hypothesis function goes from 0 to 1
     Y = 0 - Cost function goes from 0 to 100 linearly as hypothesis function goes from 0 to 1
 Compare results with those of the standard logistic algorithm.
+
+
+Assignment 3
+============
+
+1. You are given 21 well distributed training pattern of dimensionality 3.
+    1. What is the probability that a linear classifier separates a randomly selected dichotomy of training patterns?
+    2.  What is the minimum degree polynomial function that guarantees separation of any dichotomy of 21 sample patterns?
+2. You are given training patterns {X1 , .  .  .  .  , XN} from both classes. All patterns are augmented by 1 and patterns 
+of Class-2 are multiplied by -1 as discussed in the class.  The cost function
+    J(θ) = ∑ # I = 1 to N (1/X # i # t X # i) [| θ # t X # i | # 2 | θ # t X # i | θ # t X # i ]
+attains its only minimum value of zero if θ # t X # i &gt; 0 for all X # i.  Develop a machine learning algorithm based on gradient
+descent approach to learn θ from training data to separate the two classes.
+
+3. You are given the following training data.
+    Class1: (2  4) # t , (3  3) # t
+    Class2: (6 12) # t , (8  10) # t
+
+Starting with an initial parameter vector [0 1 1] # t ,
+    1. Illustrate 4 iterations of perceptron – formulation 1.
+    2. Illustrate 4 iterations of perceptron – formulation 2.
+    3. Illustrate 4 iterations of relaxation with b = 1.
+    4. Illustrate 4 iterations of Ho-Kashyap algorithm with b = [1 1 1 1] # t.
