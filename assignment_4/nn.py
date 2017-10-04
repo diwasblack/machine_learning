@@ -128,7 +128,7 @@ class NN():
                 )
 
                 # Update weights
-                self.weights[-1] += self.learning_rate * delta * activations[-2].T
+                self.weights[-1] += self.learning_rate * activations[-2].T.dot(delta)
                 self.biases[-1] += self.learning_rate * delta
 
                 # Backpropagate delta through layers
@@ -136,11 +136,11 @@ class NN():
 
                     layer_index = layer - 1
 
-                    layer_activation = activations[layer_index+1]
+                    layer_activation = activations[layer_index+1].T
 
                     delta = np.dot(self.weights[layer_index+1], delta) * np.multiply(
-                        layer_activation.T,
-                        (1.0 - layer_activation.T)
+                        layer_activation,
+                        (1.0 - layer_activation)
                     )
 
                     self.weights[layer_index] += self.learning_rate * np.dot(
