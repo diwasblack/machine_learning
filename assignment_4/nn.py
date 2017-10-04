@@ -75,8 +75,13 @@ class NN():
         Calculate the cost function
         """
 
+        y_pred = y_pred.reshape(len(y_target), 1)
+
         # Total squared error
         squared_error = np.linalg.norm(y_target - y_pred)
+
+        # Mean squared error
+        return squared_error / len(y_target)
 
     def train(self, input_list, output_list):
         """
@@ -87,7 +92,9 @@ class NN():
         output_array = np.array(output_list)
 
         # Keep training until stopping criteria is met
-        for i in range(100000):
+        iteration = 0
+        while(True):
+            predicted_output_list = np.array([])
             for input_sample, output_sample in zip(input_array, output_array):
                 activations = [input_sample.reshape(1, len(input_sample))]
 
@@ -111,6 +118,10 @@ class NN():
                     activations.append(layer_activation)
 
                 predicted_output = activations[-1]
+                predicted_output_list = np.append(
+                    predicted_output_list,
+                    predicted_output
+                )
                 delta = (output_sample - predicted_output) * np.multiply(
                     predicted_output,
                     (1.0 - predicted_output)
@@ -137,6 +148,17 @@ class NN():
                         delta.T
                     )
                     self.biases[layer_index] += self.learning_rate * delta
+
+            cost = self.cost_function(predicted_output_list, output_array)
+            if cost <= 0.01:
+                break
+
+            if iteration % 1000 == 0:
+                print("Iteration: {}, Cost: {}".format(iteration, cost))
+
+            if iteration >= 100000:
+                break
+            iteration += 1
 
 
 def main():
