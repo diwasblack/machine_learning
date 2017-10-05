@@ -83,13 +83,11 @@ class NN():
         # Mean squared error
         return squared_error / len(y_target)
 
-    def train(self, input_list, output_list):
+    def train(self, input_array, output_array):
         """
         Train the neural network
         """
-
-        input_array = np.array(input_list)
-        output_array = np.array(output_list)
+        logger.info("Training neural network")
 
         # Keep training until stopping criteria is met
         iteration = 0
@@ -163,16 +161,12 @@ class NN():
 
 def main():
     # Create a neural network model
-    model = NN([2, 10, 1])
-    print(model.predict([0, 0]))
-    print(model.predict([1, 0]))
-    print(model.predict([0, 1]))
-    print(model.predict([1, 1]))
-    model.train([[0, 0], [0, 1], [1, 0], [1, 1]], [[0], [1], [1], [0]])
-    print(model.predict([0, 0]))
-    print(model.predict([1, 0]))
-    print(model.predict([0, 1]))
-    print(model.predict([1, 1]))
+    model = NN([2, 10, 10, 1])
+    x = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
+    y = np.array([[0], [1], [1], [0]])
+
+    # Train model
+    model.train(x, y)
 
 
 if __name__ == "__main__":
