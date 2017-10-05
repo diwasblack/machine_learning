@@ -1,4 +1,11 @@
+import logging
 import numpy as np
+
+logging.basicConfig(
+    format='%(asctime)s %(levelname)s %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 
 class NN():
@@ -6,12 +13,14 @@ class NN():
     Class for neural network
     """
 
-    def __init__(self, neuron_layers, lr=0.01):
+    def __init__(self, neuron_layers, lr=0.01, print_frequency=10000):
         self.neuron_layers = neuron_layers
         self.number_of_layers = len(neuron_layers)
         self.weights = []
         self.biases = []
         self.learning_rate = lr
+
+        self.print_frequency = print_frequency
 
         # Initialize weights
         self.initialize_weights()
@@ -49,8 +58,6 @@ class NN():
         """
         Feed forward the values to obtain the predicted value
         """
-        x = np.array(x)
-
         # Set layer_activation to x initially
         layer_activation = x
         for layer in range(1, self.number_of_layers):
@@ -68,7 +75,7 @@ class NN():
             layer_activation = self.activation_function(z)
 
         # Return activation obtained from final layer
-        return layer_activation.T
+        return layer_activation
 
     def cost_function(self, y_pred, y_target):
         """
@@ -148,13 +155,15 @@ class NN():
                     self.biases[layer_index] += self.learning_rate * delta
 
             cost = self.cost_function(predicted_output_list, output_array)
+
+            logger.debug("Iteration: {}, Cost: {}".format(iteration, cost))
+
+            if iteration % self.print_frequency == 0:
+                logger.info("Iteration: {}, Cost: {}".format(iteration, cost))
             if cost <= 0.01:
                 break
 
-            if iteration % 1000 == 0:
-                print("Iteration: {}, Cost: {}".format(iteration, cost))
-
-            if iteration >= 100000:
+            if iteration >= 1000000:
                 break
             iteration += 1
 
@@ -167,6 +176,9 @@ def main():
 
     # Train model
     model.train(x, y)
+
+    # Predict output
+    logger.info("Predicted values:\n{}".format(model.predict(x)))
 
 
 if __name__ == "__main__":
