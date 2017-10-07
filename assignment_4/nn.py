@@ -1,3 +1,5 @@
+import os
+import pickle
 import logging
 import numpy as np
 
@@ -13,14 +15,23 @@ class NN():
     Class for neural network
     """
 
-    def __init__(self, neuron_layers, lr=0.01, print_frequency=10000):
+    def __init__(self, neuron_layers, lr=0.01, print_frequency=10000, momentum_coefficient=0.5):
         self.neuron_layers = neuron_layers
         self.number_of_layers = len(neuron_layers)
+
+        # Store information of last weights and biases
         self.weights = []
+        self.previous_weights = []
         self.biases = []
+        self.previous_biases = []
+
+        # Hyper parameters
         self.learning_rate = lr
+        self.momentum_coefficient = momentum_coefficient
 
         self.print_frequency = print_frequency
+
+        self.parameters_file = "weights.pkl"
 
         # Initialize weights
         self.initialize_weights()
@@ -36,23 +47,36 @@ class NN():
         """
         Initial weights
         """
+        # Check if there's a dump file for weights and biases
+        if os.path.exists(self.parameters_file):
+            file = open(self.parameters_file, "rb")
+            self.weights, self.biases = pickle.load(file)
+            file.close()
+        else:
+            # Randomly initialize weights
+            for i in range(1, self.number_of_layers):
+                current_layer_neurons = self.neuron_layers[i]
+                previous_layer_neurons = self.neuron_layers[i - 1]
 
-        for i in range(1, self.number_of_layers):
-            current_layer_neurons = self.neuron_layers[i]
-            previous_layer_neurons = self.neuron_layers[i-1]
+                # Create a numpy array to hold weights
+                # Randomly initialize weights using uniform distribution in the
+                # range [-0.5, 0.5]
+                layer_weights = np.random.rand(
+                    previous_layer_neurons, current_layer_neurons) - 0.5
 
-            # Create a numpy array to hold weights
-            # Randomly initialize weights using uniform distribution in the
-            # range [-0.5, 0.5]
-            layer_weights = np.random.rand(
-                previous_layer_neurons, current_layer_neurons) - 0.5
+                # Store layer weights
+                self.weights.append(layer_weights)
 
-            # Store layer weights
-            self.weights.append(layer_weights)
+                # Randomly initialize biases in range [-0.5, 0.5]
+                random_biases = np.random.rand(current_layer_neurons, 1) - 0.5
+                self.biases.append(random_biases)
 
-            # Randomly initialize biases in range [-0.5, 0.5]
-            random_biases = np.random.rand(current_layer_neurons, 1) - 0.5
-            self.biases.append(random_biases)
+            # Create a dump file for weights and biases
+            file = open(self.parameters_file, "wb")
+            pickle.dump((self.weights, self.biases), file)
+
+        self.previous_weights.append(self.weights)
+        self.previous_biases.append(self.biases)
 
     def predict(self, x):
         """
@@ -95,6 +119,9 @@ class NN():
         Train the neural network
         """
         logger.info("Training neural network")
+        logger.info("Using momentum_coefficient={}".format(
+            self.momentum_coefficient
+        ))
 
         # Keep training until stopping criteria is met
         iteration = 0
@@ -132,18 +159,27 @@ class NN():
                     (1.0 - predicted_output)
                 )
 
-                # Update weights
-                self.weights[-1] += self.learning_rate * activations[-2].T.dot(delta)
-                self.biases[-1] += self.learning_rate * delta
+                previous_weights = self.previous_weights.pop(0)
+                previous_biases = self.previous_biases.pop(0)
+
+                logger.info("\n{}".format(str(self.weights[-1]-previous_weights[-1])))
+
+                # Update weights using SGD and momentum
+                self.weights[-1] += self.learning_rate * \
+                    activations[-2].T.dot(delta) + self.momentum_coefficient *\
+                    (self.weights[-1] - previous_weights[-1])
+                self.biases[-1] += self.learning_rate * delta + \
+                    self.momentum_coefficient *\
+                    (self.biases[-1] - previous_biases[-1])
 
                 # Backpropagate delta through layers
-                for layer in range(self.number_of_layers-2, 0, -1):
+                for layer in range(self.number_of_layers - 2, 0, -1):
 
                     layer_index = layer - 1
 
-                    layer_activation = activations[layer_index+1].T
+                    layer_activation = activations[layer_index + 1].T
 
-                    delta = np.dot(self.weights[layer_index+1], delta) * np.multiply(
+                    delta = np.dot(self.weights[layer_index + 1], delta) * np.multiply(
                         layer_activation,
                         (1.0 - layer_activation)
                     )
@@ -151,8 +187,11 @@ class NN():
                     self.weights[layer_index] += self.learning_rate * np.dot(
                         activations[layer_index].T,
                         delta.T
-                    )
-                    self.biases[layer_index] += self.learning_rate * delta
+                    ) + self.momentum_coefficient * (self.weights[layer_index] - previous_weights[layer_index])
+                    self.biases[layer_index] += self.learning_rate * delta + self.momentum_coefficient * (self.biases[layer_index] - previous_biases[layer_index])
+
+                self.previous_weights.append(self.weights)
+                self.previous_biases.append(self.biases)
 
             cost = self.cost_function(predicted_output_list, output_array)
 
@@ -170,7 +209,8 @@ class NN():
 
 def main():
     # Create a neural network model
-    model = NN([2, 10, 10, 1])
+    model = NN([2, 4, 1], momentum_coefficient=0)
+    # model = NN([2, 4, 1], momentum_coefficient=0.5)
     x = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
     y = np.array([[0], [1], [1], [0]])
 
