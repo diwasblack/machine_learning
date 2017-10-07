@@ -5,9 +5,7 @@ import logging
 import numpy as np
 
 logging.basicConfig(
-    format='%(asctime)s %(levelname)s %(message)s',
-    level=logging.INFO
-)
+    format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -16,7 +14,11 @@ class NN():
     Class for neural network
     """
 
-    def __init__(self, neuron_layers, lr=0.01, print_frequency=10000, momentum_coefficient=0):
+    def __init__(self,
+                 neuron_layers,
+                 lr=0.01,
+                 print_frequency=10000,
+                 momentum_coefficient=0):
         self.neuron_layers = neuron_layers
         self.number_of_layers = len(neuron_layers)
 
@@ -70,8 +72,8 @@ class NN():
                 # Create a numpy array to hold weights
                 # Randomly initialize weights using uniform distribution in the
                 # range [-0.5, 0.5]
-                layer_weights = np.random.rand(
-                    previous_layer_neurons, current_layer_neurons) - 0.5
+                layer_weights = np.random.rand(previous_layer_neurons,
+                                               current_layer_neurons) - 0.5
 
                 # Store layer weights
                 self.weights.append(layer_weights)
@@ -130,13 +132,12 @@ class NN():
         Train the neural network
         """
         logger.info("Training neural network")
-        logger.info("Using momentum_coefficient={}".format(
-            self.momentum_coefficient
-        ))
+        logger.info(
+            "Using momentum_coefficient={}".format(self.momentum_coefficient))
 
         # Keep training until stopping criteria is met
         iteration = 0
-        while(True):
+        while (True):
             predicted_output_list = np.array([])
             for input_sample, output_sample in zip(input_array, output_array):
                 activations = [input_sample.reshape(1, len(input_sample))]
@@ -161,19 +162,16 @@ class NN():
                     activations.append(layer_activation)
 
                 predicted_output = activations[-1]
-                predicted_output_list = np.append(
-                    predicted_output_list,
-                    predicted_output
-                )
+                predicted_output_list = np.append(predicted_output_list,
+                                                  predicted_output)
                 delta = (output_sample - predicted_output) * np.multiply(
-                    predicted_output,
-                    (1.0 - predicted_output)
-                )
+                    predicted_output, (1.0 - predicted_output))
 
                 previous_weights = self.previous_weights.pop(0)
                 previous_biases = self.previous_biases.pop(0)
 
-                logger.info("\n{}".format(str(self.weights[-1]-previous_weights[-1])))
+                logger.info("\n{}".format(
+                    str(self.weights[-1] - previous_weights[-1])))
 
                 # Update weights using SGD and momentum
                 self.weights[-1] += self.learning_rate * \
@@ -190,16 +188,20 @@ class NN():
 
                     layer_activation = activations[layer_index + 1].T
 
-                    delta = np.dot(self.weights[layer_index + 1], delta) * np.multiply(
-                        layer_activation,
-                        (1.0 - layer_activation)
-                    )
+                    delta = np.dot(self.weights[layer_index
+                                                + 1], delta) * np.multiply(
+                                                    layer_activation,
+                                                    (1.0 - layer_activation))
 
                     self.weights[layer_index] += self.learning_rate * np.dot(
                         activations[layer_index].T,
-                        delta.T
-                    ) + self.momentum_coefficient * (self.weights[layer_index] - previous_weights[layer_index])
-                    self.biases[layer_index] += self.learning_rate * delta + self.momentum_coefficient * (self.biases[layer_index] - previous_biases[layer_index])
+                        delta.T) + self.momentum_coefficient * (
+                            self.weights[layer_index] -
+                            previous_weights[layer_index])
+                    self.biases[
+                        layer_index] += self.learning_rate * delta + self.momentum_coefficient * (
+                            self.biases[layer_index] -
+                            previous_biases[layer_index])
 
                 # Store weights
                 self.backup_weights()
