@@ -2,7 +2,9 @@ import os
 import copy
 import pickle
 import logging
+
 import numpy as np
+import matplotlib.pyplot as plt
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
@@ -31,6 +33,9 @@ class NN():
         # Hyper parameters
         self.learning_rate = lr
         self.momentum_coefficient = momentum_coefficient
+
+        # Store cost during training
+        self.training_cost = []
 
         self.print_frequency = print_frequency
 
@@ -170,7 +175,7 @@ class NN():
                 previous_weights = self.previous_weights.pop(0)
                 previous_biases = self.previous_biases.pop(0)
 
-                logger.info("\n{}".format(
+                logger.debug("\n{}".format(
                     str(self.weights[-1] - previous_weights[-1])))
 
                 # Update weights using SGD and momentum
@@ -207,6 +212,7 @@ class NN():
                 self.backup_weights()
 
             cost = self.cost_function(predicted_output_list, output_array)
+            self.training_cost.append(cost)
 
             logger.debug("Iteration: {}, Cost: {}".format(iteration, cost))
 
@@ -219,15 +225,28 @@ class NN():
                 break
             iteration += 1
 
+    def plot_training_cost(self):
+        """
+        Plot a graph of training_cost vs number of iterations
+        """
+
+        plt.plot(list(range(len(self.training_cost))), self.training_cost)
+        plt.xlabel("Number of iterations")
+        plt.ylabel("Training cost")
+        plt.savefig("cost.png")
+
 
 def main():
     # Create a neural network model
-    model = NN([2, 4, 1], momentum_coefficient=0.5)
+    model = NN([2, 4, 1])
     x = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
     y = np.array([[0], [1], [1], [0]])
 
     # Train model
     model.train(x, y)
+
+    # Plot and save training cost graph
+    model.plot_training_cost()
 
     # Predict output
     logger.info("Predicted values:\n{}".format(model.predict(x)))
