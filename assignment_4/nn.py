@@ -38,8 +38,7 @@ class NN():
                  print_frequency=10000,
                  momentum_coefficient=0,
                  activation_function="sigmoid",
-                 nguyen_widrow_weights=False
-                 ):
+                 nguyen_widrow_weights=False):
         self.neuron_layers = neuron_layers
         self.number_of_layers = len(neuron_layers)
 
@@ -128,18 +127,15 @@ class NN():
         # Original paper uses a shallow nerual network
         if self.number_of_layers <= 3 and self.nguyen_widrow_weights:
             # Calculate beta
-            beta = 0.7 * np.power(
-                self.neuron_layers[1],
-                1.0 / self.neuron_layers[0]
-            )
+            beta = 0.7 * np.power(self.neuron_layers[1],
+                                  1.0 / self.neuron_layers[0])
 
             # Set weights and biases using nguygen-widrow approach
             self.weights[0] = beta * self.weights[0] / \
                 np.linalg.norm(self.weights[0])
 
             self.biases[0] = 2.0 * beta * np.random.rand(
-                self.neuron_layers[1],
-                1) - beta
+                self.neuron_layers[1], 1) - beta
 
         # Backup the weights and biases.
         # Must be done twice
@@ -278,8 +274,9 @@ class NN():
         """
         Plot a graph of training_cost vs number of iterations
         """
+        training_costs = self.training_cost[:]
 
-        plt.plot(list(range(len(self.training_cost))), self.training_cost)
+        plt.plot(list(range(len(training_costs))), training_costs)
         plt.xlabel("Number of iterations")
         plt.ylabel("Training cost")
         plt.savefig("cost.png")
@@ -287,7 +284,7 @@ class NN():
 
 def main():
     # Create a neural network model
-    model = NN([2, 4, 1])
+    model = NN([2, 4, 1], activation_function="tanh")
     x = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
     y = np.array([[0], [1], [1], [0]])
 
