@@ -1,4 +1,5 @@
 import os
+import copy
 import pickle
 import logging
 import numpy as np
@@ -43,6 +44,14 @@ class NN():
         """
         return 1.0 / (1.0 + np.exp(-x))
 
+    def backup_weights(self):
+        """
+        Make a deep copy of the current weights and biases
+        """
+
+        self.previous_weights.append(copy.deepcopy(self.weights))
+        self.previous_biases.append(copy.deepcopy(self.biases))
+
     def initialize_weights(self):
         """
         Initial weights
@@ -75,8 +84,10 @@ class NN():
             file = open(self.parameters_file, "wb")
             pickle.dump((self.weights, self.biases), file)
 
-        self.previous_weights.append(self.weights)
-        self.previous_biases.append(self.biases)
+        # Backup the weights and biases.
+        # Must be done twice
+        self.backup_weights()
+        self.backup_weights()
 
     def predict(self, x):
         """
@@ -190,8 +201,8 @@ class NN():
                     ) + self.momentum_coefficient * (self.weights[layer_index] - previous_weights[layer_index])
                     self.biases[layer_index] += self.learning_rate * delta + self.momentum_coefficient * (self.biases[layer_index] - previous_biases[layer_index])
 
-                self.previous_weights.append(self.weights)
-                self.previous_biases.append(self.biases)
+                # Store weights
+                self.backup_weights()
 
             cost = self.cost_function(predicted_output_list, output_array)
 
@@ -209,8 +220,7 @@ class NN():
 
 def main():
     # Create a neural network model
-    model = NN([2, 4, 1], momentum_coefficient=0)
-    # model = NN([2, 4, 1], momentum_coefficient=0.5)
+    model = NN([2, 4, 1], momentum_coefficient=0.5)
     x = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
     y = np.array([[0], [1], [1], [0]])
 
