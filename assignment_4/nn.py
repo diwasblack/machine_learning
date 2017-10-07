@@ -271,6 +271,10 @@ def main():
     x = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
     y = np.array([[0], [1], [1], [0]])
 
+    # Input/output for bipolar xor representation
+    # x = np.array([[-1, -1], [-1, 1], [1, -1], [1, 1]])
+    # y = np.array([[-1], [1], [1], [-1]])
+
     # Train model
     model.train(x, y)
 
