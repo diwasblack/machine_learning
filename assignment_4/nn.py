@@ -16,7 +16,7 @@ class NN():
     Class for neural network
     """
 
-    def __init__(self, neuron_layers, lr=0.01, print_frequency=10000, momentum_coefficient=0.5):
+    def __init__(self, neuron_layers, lr=0.01, print_frequency=10000, momentum_coefficient=0):
         self.neuron_layers = neuron_layers
         self.number_of_layers = len(neuron_layers)
 
