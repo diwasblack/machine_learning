@@ -11,6 +11,22 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def sigmoid_function(x):
+    return 1.0 / (1.0 + np.exp(-x))
+
+
+def sigmoid_function_derivative(x):
+    return x * (1.0 - x)
+
+
+def hyperbolic_tangent(x):
+    return np.tanh(x)
+
+
+def hyperbolic_tangent_derivative(x):
+    return 1.0 - np.square(x)
+
+
 class NN():
     """
     Class for neural network
@@ -20,7 +36,8 @@ class NN():
                  neuron_layers,
                  lr=0.01,
                  print_frequency=10000,
-                 momentum_coefficient=0):
+                 momentum_coefficient=0,
+                 activation_function="sigmoid"):
         self.neuron_layers = neuron_layers
         self.number_of_layers = len(neuron_layers)
 
@@ -43,6 +60,19 @@ class NN():
 
         # Initialize weights
         self.initialize_weights()
+
+        # Set activation function
+        self.set_activation_function(activation_function)
+
+    def set_activation_function(self, activation_function):
+        if activation_function == "tanh":
+            self.activation_function = hyperbolic_tangent
+            self.activation_function_derivative = hyperbolic_tangent_derivative
+        elif activation_function == "sigmoid":
+            self.activation_function = sigmoid_function
+            self.activation_function_derivative = sigmoid_function_derivative
+        else:
+            raise Exception("Activation function not found")
 
     def activation_function(self, x):
         """
@@ -169,8 +199,8 @@ class NN():
                 predicted_output = activations[-1]
                 predicted_output_list = np.append(predicted_output_list,
                                                   predicted_output)
-                delta = (output_sample - predicted_output) * np.multiply(
-                    predicted_output, (1.0 - predicted_output))
+                delta = (output_sample - predicted_output) * \
+                    self.activation_function_derivative(predicted_output)
 
                 previous_weights = self.previous_weights.pop(0)
                 previous_biases = self.previous_biases.pop(0)
@@ -193,10 +223,9 @@ class NN():
 
                     layer_activation = activations[layer_index + 1].T
 
-                    delta = np.dot(self.weights[layer_index
-                                                + 1], delta) * np.multiply(
-                                                    layer_activation,
-                                                    (1.0 - layer_activation))
+                    delta = np.dot(
+                        self.weights[layer_index + 1], delta
+                    ) * self.activation_function_derivative(layer_activation)
 
                     self.weights[layer_index] += self.learning_rate * np.dot(
                         activations[layer_index].T,
@@ -238,7 +267,7 @@ class NN():
 
 def main():
     # Create a neural network model
-    model = NN([2, 4, 1])
+    model = NN([2, 4, 1], activation_function="tanh")
     x = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
     y = np.array([[0], [1], [1], [0]])
 
