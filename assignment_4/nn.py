@@ -37,7 +37,9 @@ class NN():
                  lr=0.01,
                  print_frequency=10000,
                  momentum_coefficient=0,
-                 activation_function="sigmoid"):
+                 activation_function="sigmoid",
+                 nguyen_widrow_weights=False
+                 ):
         self.neuron_layers = neuron_layers
         self.number_of_layers = len(neuron_layers)
 
@@ -50,6 +52,7 @@ class NN():
         # Hyper parameters
         self.learning_rate = lr
         self.momentum_coefficient = momentum_coefficient
+        self.nguyen_widrow_weights = nguyen_widrow_weights
 
         # Store cost during training
         self.training_cost = []
@@ -120,6 +123,23 @@ class NN():
             # Create a dump file for weights and biases
             file = open(self.parameters_file, "wb")
             pickle.dump((self.weights, self.biases), file)
+
+        # Use nguyen-widrow approach of assigining initial weights
+        # Original paper uses a shallow nerual network
+        if self.number_of_layers <= 3 and self.nguyen_widrow_weights:
+            # Calculate beta
+            beta = 0.7 * np.power(
+                self.neuron_layers[1],
+                1.0 / self.neuron_layers[0]
+            )
+
+            # Set weights and biases using nguygen-widrow approach
+            self.weights[0] = beta * self.weights[0] / \
+                np.linalg.norm(self.weights[0])
+
+            self.biases[0] = 2.0 * beta * np.random.rand(
+                self.neuron_layers[1],
+                1) - beta
 
         # Backup the weights and biases.
         # Must be done twice
@@ -267,7 +287,7 @@ class NN():
 
 def main():
     # Create a neural network model
-    model = NN([2, 4, 1], activation_function="tanh")
+    model = NN([2, 4, 1])
     x = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
     y = np.array([[0], [1], [1], [0]])
 
