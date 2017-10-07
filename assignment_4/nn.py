@@ -19,6 +19,14 @@ def sigmoid_function_derivative(x):
     return x * (1.0 - x)
 
 
+def bipolar_sigmoid_function(x):
+    return 2.0 / (1.0 + np.exp(-x)) - 1.0
+
+
+def bipolar_sigmoid_function_derivative(x):
+    return (1.0 - np.square(x)) / 2.0
+
+
 def hyperbolic_tangent(x):
     return np.tanh(x)
 
@@ -73,15 +81,11 @@ class NN():
         elif activation_function == "sigmoid":
             self.activation_function = sigmoid_function
             self.activation_function_derivative = sigmoid_function_derivative
+        elif activation_function == "bipolar_sigmoid":
+            self.activation_function = bipolar_sigmoid_function
+            self.activation_function_derivative = bipolar_sigmoid_function_derivative
         else:
             raise Exception("Activation function not found")
-
-    def activation_function(self, x):
-        """
-        The activation function to use.
-        For now let's use sigmoid as activation function
-        """
-        return 1.0 / (1.0 + np.exp(-x))
 
     def backup_weights(self):
         """
@@ -284,7 +288,7 @@ class NN():
 
 def main():
     # Create a neural network model
-    model = NN([2, 4, 1], activation_function="tanh")
+    model = NN([2, 4, 1])
     x = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
     y = np.array([[0], [1], [1], [0]])
 
