@@ -1,0 +1,60 @@
+\section{}
+
+\subsection{Initial weights and biases}
+\label{sec:weights}
+
+Weights between input layer and hidden layer
+\[
+\begin{bmatrix}
+    0.39653235 & -0.06798961 & -0.03110093 & 0.35617649 \\
+    -0.2372905 & -0.08188699 & -0.2610652 & 0.1051389
+\end{bmatrix}
+\]
+
+Biases between input layer and hidden layer
+\[
+\begin{bmatrix}
+    0.2304629 \\
+    -0.40825189 \\
+    0.48841448 \\
+    -0.49694009 \\
+\end{bmatrix}
+\]
+
+
+Weights between hidden layer and output layer
+\[
+\begin{bmatrix}
+-0.26704499 \\
+0.00909349 \\
+-0.10233779 \\
+0.22680813 \\
+\end{bmatrix}
+\]
+
+Biases between hidden layer and output layer
+\[
+\begin{bmatrix}
+-0.35936101
+\end{bmatrix}
+\]
+
+\subsection{}
+\label{sec:sgd}
+At first a neural network with single hidden layer having 4 neurons was constructed. The weights for the network was
+randomly initialized in the range [-0.5, 0.5]. Sigmoid function was selected as the
+activation function for the network. Then, stochastic gradient descent without
+any modification was used to train the network. Plot of training cost with respect
+to iteration is shown in figure \ref{fig:cost_sgd}.
+
+A minimum threshold of 0.01 is selected as a stopping criteria for training algorithm.
+The training is stopped as soon as average training error for samples was less than the threshold. The training algorithm
+uses a learning rate($\eta$)=0.01.
+
+\section{}
+The neural network described in section \ref{sec:sgd} was again initialized with weights
+presented in \ref{sec:weights}. It was then trained on the given samples using stochastic gradient descent with momentum
+having momentum coefficient($\mu$)$=0.5$. The plot of training cost with respect to iteration is shown in \ref{fig:cost_sgd_momentum}.
+
+Comparing the figures \ref{fig:cost_sgd} and \ref{fig:cost_sgd_momentum} it is clear that the SGD algorithm
+with momentum reaches the minimum threshold of 0.01 in lesser number of iterations than unmodified SGD algorithm.
